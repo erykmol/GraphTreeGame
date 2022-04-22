@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="noga1.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg1182"
+   version="1.1"
+   viewBox="0 0 31.758297 68.552137"
+   height="68.552139mm"
+   width="31.758297mm">
+  <defs
+     id="defs1176">
+    <linearGradient
+       id="linearGradient3684-2"
+       inkscape:collect="always">
+      <stop
+         id="stop3680"
+         offset="0"
+         style="stop-color:#666666;stop-opacity:1" />
+      <stop
+         id="stop3682"
+         offset="1"
+         style="stop-color:#cccccc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="252.2569"
+       x2="158.43805"
+       y1="252.2569"
+       x1="134.36404"
+       id="linearGradient3696-7-2"
+       xlink:href="#linearGradient3684-2"
+       inkscape:collect="always"
+       gradientTransform="rotate(2.2775256,156.11754,-1909.9596)" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:snap-global="false"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer6"
+     inkscape:document-units="mm"
+     inkscape:cy="57.154312"
+     inkscape:cx="208.18039"
+     inkscape:zoom="0.89189393"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata1179">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="ogon"
+     id="layer8"
+     inkscape:groupmode="layer" />
+  <g
+     sodipodi:insensitive="true"
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="noga1"
+     id="layer3"
+     inkscape:groupmode="layer">
+    <path
+       inkscape:transform-center-y="26.37261"
+       inkscape:transform-center-x="5.0748588"
+       sodipodi:nodetypes="zzzzzzzczzzz"
+       id="path3688-4-9"
+       d="m 55.390004,222.45332 c -2.014394,6.15321 0.264337,26.93821 0.75486,32.39059 0.490522,5.45238 -4.38032,21.84374 -5.857546,21.92504 -1.477227,0.0813 -4.864093,1.4727 -5.651739,2.82195 -0.787645,1.34926 -0.904353,1.95605 0.155561,3.05291 1.059914,1.09687 3.8003,0.7561 6.072834,0.51853 2.272534,-0.23757 5.217861,-0.83117 7.288967,-2.20289 2.071106,-1.37172 6.845409,-28.24642 6.845409,-28.24642 0,0 10.946791,-21.45076 10.778473,-27.51007 -0.168318,-6.05932 -1.659976,-6.59694 -4.3712,-8.48311 -2.711225,-1.88616 -7.200512,-2.42493 -10.198908,-1.23655 -2.998397,1.1884 -3.802317,0.81681 -5.816711,6.97002 z"
+       style="fill:url(#linearGradient3696-7-2);fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="noga3"
+     id="layer5"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="korpus"
+     id="layer2"
+     inkscape:groupmode="layer" />
+  <g
+     style="display:inline"
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="glowa"
+     id="layer7"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="noga4"
+     id="layer6"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-44.020448,-214.85363)"
+     inkscape:label="noga2"
+     id="layer4"
+     inkscape:groupmode="layer" />
+</svg>

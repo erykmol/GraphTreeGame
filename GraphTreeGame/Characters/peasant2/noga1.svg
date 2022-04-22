@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="241.905"
+   inkscape:export-xdpi="241.905"
+   inkscape:export-filename="C:\Users\260862\Desktop\bartender.png"
+   width="37.250355mm"
+   height="139.79485mm"
+   viewBox="0 0 37.250355 139.79484"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="noga1.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4045">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 87.197134,57.598109 C 88.69643,71.309833 86.336415,84.020996 68.797741,92.79695 L 14.399527,175.72756 -18.399396,142.39532 27.465763,50.665004 Z"
+         id="path4047"
+         sodipodi:nodetypes="cccccc" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     inkscape:guide-bbox="true"
+     showguides="true"
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.63221632"
+     inkscape:cx="-95.934036"
+     inkscape:cy="2.2627018"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer4"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:snap-others="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-global="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     sodipodi:insensitive="true"
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="noga1"
+     id="layer6"
+     inkscape:groupmode="layer">
+    <g
+       transform="matrix(1.1324525,-0.10357649,0.12571538,0.95725753,-13.280276,15.542358)"
+       inkscape:transform-center-y="66.667756"
+       inkscape:transform-center-x="2.8583127"
+       id="g3238">
+      <g
+         id="g3217">
+        <path
+           inkscape:transform-center-y="55.295672"
+           inkscape:transform-center-x="4.9162982"
+           id="path3150"
+           d="m 54.901869,279.10562 12.91778,2.32873 22.305745,-117.677 c 2.17498,-10.62013 -21.425163,-13.4332 -23.043689,-2.29884 z"
+           style="fill:#502d16;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           sodipodi:nodetypes="ccccccccc"
+           id="path855-3"
+           d="m 53.205076,260.3867 0.882461,18.2452 -9.472253,10.37245 c -2.576146,3.70514 -2.261637,6.06228 1.297762,7.75253 6.765424,0.9591 8.58598,0.37314 11.841104,-0.68863 3.970561,-2.68554 10.320331,-4.195 10.810338,-7.45504 l -0.378546,-9.03918 3.975109,-16.69166 c -3.570465,0.59418 -13.492385,0.44143 -18.955975,-2.49567 z"
+           style="fill:#3a291c;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           style="fill:#390707;fill-opacity:1;stroke:none;stroke-width:0.356345px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 61.574032,211.03247 c 0.498294,3.54156 10.713482,5.94805 16.40512,4.84298 l -0.57535,1.32314 c -4.696275,2.67932 -13.025546,0.12608 -15.963334,-4.08823 z"
+           id="path1685-96"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+    </g>
+  </g>
+  <g
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="noga2"
+     id="layer7"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="korpus"
+     id="layer8"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="reka2"
+     id="layer5"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="reka1"
+     id="layer4"
+     inkscape:groupmode="layer" />
+  <g
+     transform="translate(-72.153195,-155.10194)"
+     inkscape:label="glowa"
+     id="layer3"
+     inkscape:groupmode="layer" />
+</svg>

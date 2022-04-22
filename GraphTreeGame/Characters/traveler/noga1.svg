@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="noga1.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 42.80798 142.19331"
+   height="142.19331mm"
+   width="42.80798mm"
+   inkscape:export-filename="C:\Users\260862\Desktop\bartender.png"
+   inkscape:export-xdpi="241.905"
+   inkscape:export-ydpi="241.905">
+  <defs
+     id="defs2">
+    <clipPath
+       id="clipPath4045"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         sodipodi:nodetypes="cccccc"
+         id="path4047"
+         d="M 87.197134,57.598109 C 88.69643,71.309833 86.336415,84.020996 68.797741,92.79695 L 14.399527,175.72756 -18.399396,142.39532 27.465763,50.665004 Z"
+         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:snap-global="false"
+     inkscape:object-nodes="true"
+     inkscape:snap-others="true"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="-4.7234064"
+     inkscape:cx="157.40892"
+     inkscape:zoom="0.61064659"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="right_leg"
+     id="layer10"
+     inkscape:groupmode="layer"
+     style="display:inline"
+     transform="translate(-67.161373,-154.78561)" />
+  <g
+     sodipodi:insensitive="true"
+     style="display:inline"
+     inkscape:label="left_leg"
+     id="layer9"
+     inkscape:groupmode="layer"
+     transform="translate(-67.161373,-154.78561)">
+    <g
+       id="g3238"
+       inkscape:transform-center-x="3.9304165"
+       inkscape:transform-center-y="69.07517"
+       transform="rotate(-5.2002938,-205.93944,2039.8742)">
+      <g
+         transform="matrix(1.0497118,0.00626966,0.00626966,0.98139431,180.15256,41.439241)"
+         inkscape:transform-center-y="60.660138"
+         inkscape:transform-center-x="5.0945768"
+         id="g65">
+        <g
+           id="g3217" />
+      </g>
+    </g>
+    <g
+       transform="rotate(-2.4372975,98.922735,160.10327)"
+       inkscape:transform-center-y="65.779003"
+       inkscape:transform-center-x="10.357373"
+       id="g1113">
+      <g
+         id="g1120"
+         inkscape:transform-center-x="12.896378"
+         inkscape:transform-center-y="62.05483"
+         transform="rotate(2.7566026,99.250006,162.19736)">
+        <path
+           inkscape:transform-center-y="55.295672"
+           inkscape:transform-center-x="4.9162982"
+           id="path3150"
+           d="m 78.40738,278.12682 10.642493,0.26219 20.827907,-116.72634 c -4.0584,-9.93758 -15.496381,-7.6366 -25.934271,-2.17042 l -4.623975,6.66068 z"
+           style="display:inline;fill:#622915;fill-opacity:1;stroke:none;stroke-width:0.268541px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           sodipodi:nodetypes="cccccc" />
+        <path
+           sodipodi:nodetypes="cccccccc"
+           id="path855-3"
+           d="m 75.457025,260.87962 2.265963,18.927 -8.526275,9.78997 c -2.341832,3.84815 -1.78848,6.12261 2.09541,7.4572 7.167661,0.33539 9.016108,-0.39882 12.31976,-1.72532 3.897395,-2.97618 6.831858,-6.29768 7.034046,-9.5256 l 3.42543,-23.80903 c -3.677998,0.8978 -12.620043,1.26899 -18.614334,-1.11422 z"
+           style="display:inline;fill:#2b1100;stroke:none;stroke-width:0.268541px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           style="display:inline;fill:#241c1c;stroke:none;stroke-width:0.361676px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 79.407704,211.92708 c 0.858335,3.41505 11.772093,4.85755 17.620118,3.27215 l -0.475837,1.34357 c -4.657054,3.03462 -13.61219,1.28112 -17.086179,-2.57419 z"
+           id="path1685-96"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           transform="matrix(1.0459594,-0.0888996,0.09519517,0.97678655,-2.5701423,14.670446)"
+           sodipodi:nodetypes="ccccc"
+           id="path1614-0"
+           d="m 51.973595,273.75666 c 3.258035,1.90695 7.658697,2.80668 13.100811,1.8278 l 0.660373,-2.58474 c -7.024181,0.78862 -12.075682,-0.9325 -13.889894,-2.63986 z"
+           style="display:inline;fill:#000000;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           transform="matrix(1.0459594,-0.0888996,0.09519517,0.97678655,-2.5701423,14.670446)"
+           style="display:inline;fill:#000000;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 51.760908,267.61143 c 3.258034,1.90695 9.26059,3.08829 14.702715,2.1094 l 0.639227,-2.89848 C 60.078669,267.61097 53.446409,265.922 51.6322,264.21461 Z"
+           id="path1614-5-7"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="torso"
+     transform="translate(-67.161373,-154.78561)" />
+  <g
+     style="display:inline"
+     inkscape:label="left_arm"
+     id="layer7"
+     inkscape:groupmode="layer"
+     transform="translate(-67.161373,-154.78561)" />
+  <g
+     style="display:inline"
+     inkscape:label="right_arm"
+     id="layer8"
+     inkscape:groupmode="layer"
+     transform="translate(-67.161373,-154.78561)" />
+  <g
+     style="display:inline"
+     inkscape:label="head"
+     id="layer11"
+     inkscape:groupmode="layer"
+     transform="translate(-67.161373,-154.78561)" />
+</svg>
