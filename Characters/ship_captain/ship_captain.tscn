@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Characters/ship_captain/ship_captain.svg" type="Texture" id=1]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 62.0
+height = 116.0
+
+[node name="KinematicBody2D" type="KinematicBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -119 )
+shape = SubResource( 1 )
+
+[node name="Korpus" type="Sprite" parent="CollisionShape2D"]
+position = Vector2( -11, 1 )
+scale = Vector2( 0.207977, 0.207977 )
+texture = ExtResource( 1 )

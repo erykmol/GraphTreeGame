@@ -18,6 +18,3 @@ func _ready():
 # Called when the HTTP request is completed.
 func _http_request_completed(result, response_code, headers, body):
 	var response = parse_json(body.get_string_from_utf8())
-
-	# Will print the user agent string used by the HTTPRequest node (as recognized by httpbin.org).
-	print(response.headers["User-Agent"])

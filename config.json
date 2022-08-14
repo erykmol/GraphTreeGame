@@ -1,0 +1,23 @@
+{
+	"breastplate": {
+		"slot": "CHEST"
+	},
+	"sword": {
+		"slot": "MAIN_HAND"
+	},
+	"axe": {
+		"slot": "MAIN_HAND"
+	},
+	"sword of lumberjack": {
+		"slot": "MAIN_HAND"
+	},
+	"knife": {
+		"slot": "MAIN_HAND"
+	},
+	"torch": {
+		"slot": "OFF_HAND"
+	},
+	"beer_mug": {
+		"slot": "MAIN_HAND"
+	},
+}
