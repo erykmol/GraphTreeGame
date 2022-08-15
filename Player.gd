@@ -70,13 +70,13 @@ func _on_Area2D_body_exited(body):
 	keycap.visible = false
 
 func _process(delta):
-	if Input.is_action_just_pressed("interact") && current_body_entered != null && current_body_entered.get_meta("id") == "location_change":
+	if Input.is_action_just_pressed("interact") && current_body_entered != null:
 		if is_dialog_open:
-			get_parent().hideDialogBox(current_body_entered.get_meta("id"), self)
+			get_parent().hideDialogBox()
 			is_dialog_open = false
 
 		if !is_dialog_open && keycap.visible:
-			get_parent().showDialogBox(current_body_entered.get_meta("id"), self)
+			get_parent().showDialogBox(current_body_entered.get_meta("id"), current_body_entered)
 			is_dialog_open = true
 	
 	if Input.is_action_just_pressed("interact") && current_body_entered != null:

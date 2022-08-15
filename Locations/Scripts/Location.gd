@@ -1,5 +1,7 @@
 extends Node2D
 
+signal set_productions
+
 var player
 var json
 
@@ -47,7 +49,7 @@ func _process(delta):
 func add_characters(characters):
 	var position_x = 512
 	var directory = Directory.new();
-	
+	var characters_productions = get_productions_for_characters()
 	for character in characters:
 		if character["Name"].to_lower() == "main_hero":
 			var scene = load("res://Player.tscn")
@@ -74,8 +76,13 @@ func add_characters(characters):
 		else:
 			scene = load("res://Characters/placeholder/placeholder_character.tscn")
 		var characterInstance = scene.instance()
-		var script = load("res://NPC.gd")
-		characterInstance.set_script(script)
+		var script = load("res://NPC.gd").new()
+#		script._ready()
+#		characterInstance.set_script(script)
+#		characterInstance._ready()
+#		script._ready()
+#		script.set_process(true) # if you have processing logic
+#		script.set_physics_process(true) # if you have physics logic
 		var character_global_position = Vector2(position_x, 290)
 		if characters_positions.has(character_name):
 			characterInstance.global_position = characters_positions[character_name]
@@ -84,10 +91,13 @@ func add_characters(characters):
 			characters_positions[character_name] = character_global_position
 		position_x += 100
 		add_child(characterInstance)
+		emit_signal("set_productions", characters_productions[character_name])
+		script.set_productions(characters_productions[character_name])
 
 func add_items(items):
 	var position_x = 712
 	if items != null:
+		var items_productions = get_productions_for_items()
 		for item in items:
 			var itemInstance = item_object.instance()
 			var item_name = item["Name"].to_lower()
@@ -107,12 +117,21 @@ func add_items(items):
 				items_positions[item_name] = item_global_position
 			position_x += 200
 			add_child(itemInstance)
+			emit_signal("set_productions", items_productions[item_name])
+#			script.set_productions()
 
 func _item_picked(item):
 	remove_child(item)
 
 func _location_change(location_name, production, location_variant):
+	player.is_dialog_open = false
+	remove_child(dialog_box)
 	$HTTPRequest.post_new_world(world, production, location_variant, "Main_hero")
+
+func _production_execution(production, variant):
+	player.is_dialog_open = false
+	remove_child(dialog_box)
+	$HTTPRequest.post_new_world(world, production, variant, "Main_hero")
 
 func getFirstLocation(locations):
 	for location in locations:
@@ -124,7 +143,7 @@ func getFirstLocation(locations):
 func showDialogBox(id, object):
 	dialog_box = load("res://DialogBox/DialogBox.tscn").instance()
 	add_child(dialog_box)
-	dialog_box.set_position(Vector2(object.global_position.x, object.global_position.y - 200))
+	dialog_box.set_position(Vector2(player.global_position.x, player.global_position.y - 200))
 	if id == "location_change":
 		for location_variant in location_change_production["variants"]:
 			if String(location_variant[0]["WorldNodeId"]) == current_location_id:
@@ -135,9 +154,19 @@ func showDialogBox(id, object):
 				option.set_production(location_change_production)
 				option.connect("location_change", self, "_location_change")
 				dialog_box.addOption(option)
+	else:
+		for production in object.get_productions():
+			var option = load("res://DialogBox/DialogOption.tscn").instance()
+			option.rect_min_size = Vector2(20, 300)
+			option.set_text(production["Title"])
+			option.set_variant(production["variants"][0])
+			option.set_production(location_change_production)
+			option.connect("production_execution", self, "_production_execution")
+			dialog_box.addOption(option)
 	dialog_box.show()
 	
-func hideDialogBox(id, object):
+func hideDialogBox():
+	player.is_dialog_open = false
 	remove_child(dialog_box) 
 	dialog_box.hide()
 	dialog_box = null
@@ -175,3 +204,43 @@ func _get_productions(player_productions, all_productions):
 		if "location change" in production["prod"]["Title"].to_lower():
 			location_change_production = production
 	self.all_productions = all_productions
+#	print(JSON.print(all_productions))
+
+func get_productions_for_characters():
+	var productions_to_return = {}
+#	print("test", all_productions)
+	for production in all_productions:
+#		print(production)
+		for variant in production["variants"]:
+#			print(variant)
+			for node in variant:
+#				print(node)
+				var LSNodeRef = node["LSNodeRef"].to_lower()
+				if LSNodeRef == "bohatera" || LSNodeRef == "bohaterb":
+					var WorldNodeName = node["WorldNodeName"].to_lower()
+#					if WorldNodeName != "main_hero":
+					if productions_to_return.has(WorldNodeName):
+						productions_to_return[WorldNodeName].append(production)
+					else:
+						productions_to_return[WorldNodeName] = [production]
+#					else:
+#						if productions_to_return.has("main_hero"):
+#							productions_to_return["main_hero"] = [production]
+#						else:
+#							productions_to_return["main_hero"].append(production)
+	return  productions_to_return
+
+func get_productions_for_items():
+	var productions_to_return = {}
+	for production in all_productions:
+		var production_and_variants = {}
+		for variant in production["variants"]:
+			for node in variant:
+				var LSNodeRef = node["LSNodeRef"].to_lower()
+				if LSNodeRef == "something" || LSNodeRef == "opakowanie":
+					var WorldNodeName = node["WorldNodeName"].to_lower()
+					if productions_to_return.has(WorldNodeName):
+						productions_to_return[WorldNodeName].append(production)
+					else:
+						productions_to_return[WorldNodeName] = [production]
+	return  productions_to_return

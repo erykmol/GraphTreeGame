@@ -21,6 +21,5 @@ func hide():
 
 func addOption(option):
 	option.rect_size.y = 51
-	print("option", option.rect_size)
 	vBoxContainer.add_child(option)
 	print(vBoxContainer.rect_size)

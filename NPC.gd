@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 
+
 const UP_DIRECTION = Vector2.UP
 
 var speed = 600
@@ -12,8 +13,13 @@ export var gravity = 4500
 var _jumps_made = 0
 var _velocity = Vector2.ZERO
 
+onready var productions = []
+var is_in_party = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	connect("set_productions", self, "_set_productions")
+	print("NPC", self)
 	pass # Replace with function body.
 
 
@@ -30,3 +36,14 @@ func _physics_process(delta):
 #		scale.x = scale.y * 1
 	
 	_velocity = move_and_slide(_velocity, UP_DIRECTION)
+
+func set_productions(new_productions):
+	productions = new_productions
+	
+func _set_productions(new_productions):
+	print(" character productions ", new_productions)
+	productions = new_productions
+	disconnect("set_productions", self, "_set_productions")
+
+func get_productions():
+	return productions

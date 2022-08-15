@@ -1,6 +1,7 @@
 extends Control
 
 signal location_change
+signal production_execution
 
 var variant
 var production
