@@ -18,9 +18,7 @@ var is_in_party = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("set_productions", self, "_set_productions")
-	print("NPC", self)
-	pass # Replace with function body.
+	set_meta("type", "npc")
 
 
 func _physics_process(delta):
@@ -39,11 +37,6 @@ func _physics_process(delta):
 
 func set_productions(new_productions):
 	productions = new_productions
-	
-func _set_productions(new_productions):
-	print(" character productions ", new_productions)
-	productions = new_productions
-	disconnect("set_productions", self, "_set_productions")
 
 func get_productions():
 	return productions

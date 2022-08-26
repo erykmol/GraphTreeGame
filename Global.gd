@@ -6,11 +6,16 @@ extends Node
 # var b = "text"
 var player
 var current_location
-var characters
+var characters = []
 var location_items
-var gathered_items = []
+var main_hero_id
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var scene = load("res://Player.tscn")
-	player = scene.instance()
+	pass
+
+func is_character(id):
+	for character in characters:
+		if character["Id"] == id:
+			return true
+	return false

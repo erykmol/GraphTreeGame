@@ -2,6 +2,8 @@ extends Node2D
 
 const iconPath = "res://items32px/"
 
+var gathered_items = [ ]
+
 var equipped_items = { }
 
 var generated_Items = {
@@ -10,6 +12,7 @@ var generated_Items = {
 #		"slot": "CHEST"
 #	},
 	"error":{
+		"Name": "Error",
 		"icon": iconPath + "error.png",
 		"slot": "NONE"
 	}
@@ -26,6 +29,7 @@ func build_items_from_locations(locations):
 				insert_item(item, filesList)
 
 func build_items_from_characters(characters):
+	Global.characters = Global.characters + characters
 	var filesList = list_files_in_directory(iconPath)
 	for character in characters:
 		if character.has("Items"):
@@ -66,8 +70,8 @@ func list_files_in_directory(path):
 	return files
 	
 func get_item(item_id):
-	if item_id in generated_Items:
-		return generated_Items[item_id]
+	if item_id.to_lower() in generated_Items:
+		return generated_Items[item_id.to_lower()]
 	else:
 		return generated_Items["error"]
 
@@ -91,6 +95,29 @@ func check_if_item_is_equipped(item):
 	else:
 		return false
 
+func clean_gathered_items():
+	gathered_items.clear()
+
+func gather_item(item_name):
+	var is_in_equipped_items = false
+	for key in equipped_items.keys():
+		var equipped_item = equipped_items[key]
+		if equipped_item["Name"].to_lower() == item_name:
+			is_in_equipped_items = true
+	if generated_Items.has(item_name) && !is_in_equipped_items:
+		gathered_items.append(generated_Items[item_name])
+
+func check_if_item_is_in_inventory(item_name):
+	return gathered_items.has(item_name)
+	
 func _get_config():
 	var loader = load("res://JSONLoader/JSONLoader.gd").new()
 	return loader.load_json_file("res://config.json")
+
+func is_item(id):
+	for key in generated_Items.keys():
+		var item = generated_Items[key]
+		if item.has("Id"):
+			if item["Id"] == id:
+				return true
+	return false

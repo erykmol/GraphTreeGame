@@ -8,7 +8,7 @@ const UP_DIRECTION = Vector2.UP
 
 onready var health_bar = $HealthBar
 
-var speed = 10000
+var speed = 6000
 export var jump_strength = 1500
 export var maximum_jumps = 2
 export var double_jump_strength = 1200
@@ -33,11 +33,14 @@ var damage
 
 var item
 
+var productions = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	keycap = get_child(3)
 	var camera = get_child(2)
 	camera.position.y = position.y - 465
+	fill_equipped_items()
 
 func _physics_process(delta):
 	if !inventory_open && !map_open:
@@ -70,20 +73,23 @@ func _on_Area2D_body_exited(body):
 	keycap.visible = false
 
 func _process(delta):
-	if Input.is_action_just_pressed("interact") && current_body_entered != null:
+	if Input.is_action_just_pressed("interact"):
 		if is_dialog_open:
 			get_parent().hideDialogBox()
 			is_dialog_open = false
-
-		if !is_dialog_open && keycap.visible:
+			return
+		if !is_dialog_open && current_body_entered != null:
 			get_parent().showDialogBox(current_body_entered.get_meta("id"), current_body_entered)
 			is_dialog_open = true
-	
-	if Input.is_action_just_pressed("interact") && current_body_entered != null:
-		if current_body_entered.get_meta("scene_name") == "ItemObject":
-			var item_name = current_body_entered.get_meta("id")
-			Global.gathered_items.append(item_name.to_lower())
-			emit_signal("item_picked", current_body_entered)
+			return
+		
+	elif Input.is_action_just_pressed("self_interact"):
+		get_parent().showDialogBox("", self)
+		is_dialog_open = true
+
+func fill_equipped_items():
+	for item in ItemDB.equipped_items:
+		_slot_filled(item["slot"], item["icon"])
 
 func _slot_filled(slot, path):
 	if slot == "HEAD":
@@ -151,3 +157,6 @@ func _set_health(value):
 func _set_max_health(value):
 	max_health = value
 	health_bar.max_value = value
+
+func get_productions():
+	return productions

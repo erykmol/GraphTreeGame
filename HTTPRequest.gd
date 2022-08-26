@@ -22,7 +22,6 @@ func post_new_world(world, production, variant, object):
 	add_child(http_request)
 	http_request.connect("request_completed", self, "_http_request_completed")
 	var body = JSON.print({"world": world, "production": production["prod"], "variant": variant, "object": object})
-#	print(body)
 	var headers = ["Content-Type: application/json"]
 	var error = http_request.request("http://127.0.0.1:8000/postNewWorld", headers, false, HTTPClient.METHOD_POST, body)
 	if error != OK:
@@ -34,7 +33,7 @@ func get_map(world):
 	add_child(http_request)
 	http_request.connect("request_completed", self, "_get_map_http_request_completed")
 	var body = JSON.print({"whole": world})
-	
+#	print(body)
 	var headers = ["Content-Type: application/json"]
 	var error = http_request.request("http://127.0.0.1:8000/generateMap", headers, false, HTTPClient.METHOD_POST, body)
 	if error != OK:
@@ -44,14 +43,9 @@ func get_map(world):
 func _http_request_completed(result, response_code, headers, body):
 	var response = parse_json(body.get_string_from_utf8())
 	var world = response["world"]
+#	print("world: ",response["available_productions"])
 	get_map(world)
-	var player_productions = []
-	for production in response["available_productions"]:
-		for character in production["prod"]["LSide"]["Locations"][0]["Characters"]:
-			if character["Id"] == "Bohater" || character["Id"] == "Hero":
-				player_productions.append(production)
-				continue
-	emit_signal("get_productions", player_productions, response["available_productions"])
+	emit_signal("get_productions", response["available_productions"])
 	emit_signal("get_world", world)
 
 func _get_map_http_request_completed(result, response_code, headers, body):

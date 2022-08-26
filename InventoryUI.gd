@@ -14,9 +14,10 @@ var last_position = Vector2()
 var text_box
 
 func _ready():
-	for item in Global.gathered_items:
+#	print(ItemDB.gsathered_items)
+	for item in ItemDB.gathered_items:
 		pickup_item(item)
-	pickup_item("Error")
+	pickup_item(ItemDB.get_item("Error"))
 	equipment_slots.connect("slot_filled", self, "_slot_filled")
 
 func _process(delta):
@@ -49,9 +50,7 @@ func show_textBox(cursor_pos):
 		
 func set_data_for_text_box(item_object):
 	var item = ItemDB.get_item(item_object.get_meta("id"))
-	if item_object.get_meta("id") != "Error":
-		print("Name: " + item["Name"])
-		text_box.set_text("Name: " + item["Name"]) #  + "\nAttributes: " + JSON.print(item["Attributes"])
+	text_box.set_text("Name: " + item["Name"]) #  + "\nAttributes: " + JSON.print(item["Attributes"])
 		
 func display_text_box(item_object, cursor_pos):
 	text_box.rect_global_position = cursor_pos
@@ -99,10 +98,11 @@ func return_item():
 	last_container.insert_item(item_held)
 	item_held = null
 	
-func pickup_item(item_id):
+func pickup_item(item_object):
+	var item_id = item_object["Name"]
 	var item = item_base.instance()
 	item.set_meta("id", item_id)
-	item.texture = load(ItemDB.get_item(item_id)["icon"])
+	item.texture = load(item_object["icon"])
 	add_child(item)
 	if !grid_backpack.insert_item_at_first_available_spot(item):
 		item.queue_free()

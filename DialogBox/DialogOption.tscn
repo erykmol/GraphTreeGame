@@ -10,29 +10,19 @@
 size = 32
 font_data = ExtResource( 2 )
 
-[node name="Control" type="Control"]
-anchor_right = 0.285
-anchor_bottom = 0.044
-margin_top = -4.0
-margin_right = -0.200073
-margin_bottom = -0.520004
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="NinePatchRect" type="NinePatchRect"]
 margin_right = 610.0
 margin_bottom = 51.0
 rect_min_size = Vector2( 610, 51 )
 texture = ExtResource( 1 )
 patch_margin_left = 2
 patch_margin_right = 2
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="NinePatchRect"]
+[node name="Button" type="Button" parent="."]
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -43,7 +33,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="NinePatchRect"]
+[node name="Label" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 11.0
@@ -55,4 +45,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="NinePatchRect/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

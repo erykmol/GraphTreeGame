@@ -1,4 +1,4 @@
-extends Control
+extends NinePatchRect
 
 signal location_change
 signal production_execution
@@ -6,11 +6,12 @@ signal production_execution
 var variant
 var production
 
+onready var label = $Label
+
 func _ready():
-	pass
+	label.set_autowrap(true)
 	
 func set_text(text):
-	var label = get_child(0).get_child(1)
 	label.text = text
 
 func set_variant(variant):
@@ -20,6 +21,6 @@ func set_production(production):
 	self.production = production
 	
 func _on_Button_pressed():
-	var label = get_child(0).get_child(1)
 	var text = label.text
 	emit_signal("location_change", text, production, variant)
+	emit_signal("production_execution", text, production, variant)

@@ -24,7 +24,6 @@ func set_map_title(title):
 		sprite.texture = load("res://MapsTextures/placeholder.png")
 	sprite.global_position.y = 230
 	static_body.global_position.y = 230
-	player.global_position = Vector2(256, 290)
 
 func _process(delta):
 	if Input.is_action_just_pressed("inventory_open"):
