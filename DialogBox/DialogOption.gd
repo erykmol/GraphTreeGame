@@ -22,5 +22,5 @@ func set_production(production):
 	
 func _on_Button_pressed():
 	var text = label.text
-	emit_signal("location_change", text, production, variant)
-	emit_signal("production_execution", text, production, variant)
+	emit_signal("location_change", production, variant)
+	emit_signal("production_execution", production, variant)

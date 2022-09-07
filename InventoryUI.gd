@@ -14,7 +14,17 @@ var last_position = Vector2()
 var text_box
 
 func _ready():
-#	print(ItemDB.gsathered_items)
+	var player = get_parent()
+	print(ItemDB.equipped_items)
+	for key in ItemDB.equipped_items.keys():
+		var item_object = ItemDB.equipped_items[key]
+		var item_id = item_object["Name"]
+		var item = item_base.instance()
+		item.set_meta("id", item_id)
+		item.texture = load(item_object["icon"])
+		add_child(item)
+		equipment_slots.insert_item_for_slot(item, key)
+	
 	for item in ItemDB.gathered_items:
 		pickup_item(item)
 	pickup_item(ItemDB.get_item("Error"))
@@ -50,8 +60,13 @@ func show_textBox(cursor_pos):
 		
 func set_data_for_text_box(item_object):
 	var item = ItemDB.get_item(item_object.get_meta("id"))
-	text_box.set_text("Name: " + item["Name"]) #  + "\nAttributes: " + JSON.print(item["Attributes"])
-		
+	var text = "Name: " + item["Name"]
+	if item.has("Attributes"):
+		var attributes = item["Attributes"]
+		for key in attributes.keys():
+			text = text + "\n" + key + ": " + String(attributes[key])
+	text_box.set_text(text)
+
 func display_text_box(item_object, cursor_pos):
 	text_box.rect_global_position = cursor_pos
 	if text_box.get_parent() == null:

@@ -81,6 +81,9 @@ func remove_item_from_equipped_if_needed(item):
 
 func add_item_to_equipped(item):
 	if !check_if_item_is_equipped(item):
+		if check_if_item_is_in_inventory(item["Name"]):
+			var index = gathered_items.find(item)
+			gathered_items.remove(index)
 		var item_slot = item["slot"]
 		equipped_items[item_slot] = item
 
@@ -89,6 +92,7 @@ func check_if_item_is_equipped(item):
 		var item_slot = item["slot"]
 		if equipped_items.has(item_slot):
 			var equipped_item_id = equipped_items[item_slot]["Id"]
+			print("ileż można ",equipped_item_id, item["Id"], equipped_item_id == item["Id"]) 
 			return equipped_item_id == item["Id"]
 		else:
 			return false
@@ -108,7 +112,10 @@ func gather_item(item_name):
 		gathered_items.append(generated_Items[item_name])
 
 func check_if_item_is_in_inventory(item_name):
-	return gathered_items.has(item_name)
+	for item in gathered_items:
+		if item["Name"] == item_name:
+			return true
+	return false
 	
 func _get_config():
 	var loader = load("res://JSONLoader/JSONLoader.gd").new()
@@ -121,3 +128,13 @@ func is_item(id):
 			if item["Id"] == id:
 				return true
 	return false
+
+func check_if_item_is_owned(id):
+	for gathered_item in gathered_items:
+		if gathered_item["Id"] == id:
+			return true
+	for equipped_item in equipped_items:
+		if equipped_item["Id"] == id:
+			return true
+	return false
+

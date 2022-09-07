@@ -22,22 +22,25 @@ var chosen_production
 var characters_positions = {}
 var items_positions = {}
 
+onready var enemies = ItemDB._get_config()["enemies"]
+onready var fight_production_title = ItemDB._get_config()["fight_production_title"]
+
 func _ready():
 	$HTTPRequest.connect("get_world", self, "_get_world")
 	$HTTPRequest.connect("get_productions", self, "_get_productions")
 	$HTTPRequest.get_world()
+	Global.camera = $Camera2D
 
 func set_map_title(title):
-	var first_static_body = get_child(1)
-	var sprite = get_child(0).get_child(0).get_child(0)
+	var sprite = $ParallaxBackground/ParallaxLayer/Sprite
 	var map_texture_path = "res://MapsTextures/" + title.replace("'", "").to_lower() + ".png"
 	var directory = Directory.new()
 	if directory.file_exists(map_texture_path):
 		sprite.texture = load(map_texture_path)
 	else:
 		sprite.texture = load("res://MapsTextures/placeholder.png")
-	sprite.global_position = Vector2(0, 0)
-	player.global_position = Vector2(256, 290)
+	sprite.offset.y = -sprite.texture.get_size().y
+	sprite.scale = get_viewport_rect().size / sprite.texture.get_size()
 
 func _process(delta):
 	if Input.is_action_just_pressed("inventory_open"):
@@ -45,21 +48,28 @@ func _process(delta):
 		
 	if Input.is_action_just_pressed("map_open"):
 		player.load_map()
+
+var new_productions = {}
+#func check_if_is_matching_not_only_player(variant):
+#	for node in variant:
+#		var id = node["WorldNodeId"]
+#		if Global.is_character(id):
+#			return [true, id]
+#		else:
+#			if ItemDB.is_item(id):
+#				return [true, id]
+#	return [false, id]
 	
 func add_characters(characters):
 	var position_x = 512
 	var directory = Directory.new();
-	var characters_productions = get_productions_for_characters()
+	var characters_productions = new_productions
+#	for cc in characters_productions:
+#		print("characters_productions    ", cc["prod"]["Title"])
 	for character in characters:
 		var character_name = character["Name"].to_lower()
 		if character_name == "main_hero":
 			Global.main_hero_id = character["Id"]
-			var player_productions = characters_productions[Global.main_hero_id]
-			var filtered_player_productions = []
-			for production in player_productions:
-				if not "Teleportation" in production["prod"]["Title"]:
-					filtered_player_productions.append(production)
-			print("\n\nfifarafa", JSON.print(filtered_player_productions))
 			var scene = load("res://Player.tscn")
 			player = scene.instance()
 			player.connect("item_picked", self, "_item_picked")
@@ -74,12 +84,29 @@ func add_characters(characters):
 			var player_health = character["Attributes"]["HP"]
 			player.max_health = player_health
 			player.health = player_health
-			player.productions = filtered_player_productions
-#			print("player productions count ",len(player.productions))
-			var character_global_position = Vector2(256, 290)
+			var player_productions = characters_productions[Global.main_hero_id]
+#			var filtered_player_productions = []
+#			for production in player_productions:
+#				var production_title = production["prod"]["Title"]
+#				if not "Teleportation" in production_title && not "Location change" in production_title:
+#					var objects_count = 0
+#					for variant in production["variants"]:
+#						for node in variant:
+#							var id = node["WorldNodeId"]
+#							if Global.is_character(id):
+#								objects_count += 1
+#							else:
+#								if ItemDB.is_item(id):
+#									if !ItemDB.check_if_item_is_owned(id):
+#										objects_count += 1
+#						if objects_count == 1:
+#							filtered_player_productions.append(production)
+			
+			player.productions = player_productions
 			if characters_positions.has(character_name):
 				player.global_position = characters_positions[character_name]
 			else:
+				var character_global_position = Vector2(256, -200)
 				player.global_position = character_global_position
 				characters_positions[character_name] = character_global_position
 			return
@@ -93,7 +120,7 @@ func add_characters(characters):
 			scene = load("res://Characters/placeholder/placeholder_character.tscn")
 		var characterInstance = scene.instance()
 		characterInstance.set_script(load("res://NPC.gd"))
-		var character_global_position = Vector2(position_x, 290)
+		var character_global_position = Vector2(position_x, -200)
 		if characters_positions.has(character_name):
 			characterInstance.global_position = characters_positions[character_name]
 		else:
@@ -102,6 +129,22 @@ func add_characters(characters):
 		position_x += 100
 		add_child(characterInstance)
 		characterInstance.set_productions(characters_productions[character["Id"]])
+		
+		var timer = Timer.new()
+		add_child(timer)
+		timer.start(2)
+		timer.connect("timeout", self, "timer_cleanup", [timer])
+		timer.connect("timeout", self, "execute_timer_production", [character, characters_productions])
+		
+func execute_timer_production(character, characters_productions):
+	var character_name = character["Name"].to_lower()
+	if character_name in enemies.keys():
+		for production in characters_productions[character["Id"]]:
+			if production["prod"]["Title"] == enemies[character_name]["production_title"]:
+				__production_execution(production, production["variants"][0], character["Name"])
+
+func timer_cleanup(timer):
+	timer.queue_free()
 
 func add_items(items):
 	var position_x = 712
@@ -116,7 +159,7 @@ func add_items(items):
 			itemInstance.get_child(2).texture = load(itemDB_item["icon"])
 			var collisionShape = itemInstance.get_child(1).get_child(0)
 			collisionShape.set_disabled(false)
-			var item_global_position = Vector2(position_x, 290)
+			var item_global_position = Vector2(position_x, -540)
 			if items_positions.has(item_name):
 				itemInstance.global_position = items_positions[item_name]
 			else:
@@ -129,14 +172,21 @@ func add_items(items):
 func _item_picked(item):
 	remove_child(item)
 
-func _location_change(location_name, production, location_variant):
-	hideDialogBox()
-	$HTTPRequest.post_new_world(world, production, location_variant, "Main_hero")
+func _location_change(production, location_variant):
+	characters_positions = {}
+	items_positions = {}
+	__production_execution(production, location_variant, "Main_hero")
 
-func _production_execution(name, production, variant):
-	hideDialogBox()
-	$HTTPRequest.post_new_world(world, production, variant, "Main_hero")
+func _production_execution(production, variant):
 	characters_positions["main_hero"] = player.global_position
+	__production_execution(production, variant, "Main_hero")
+
+func __production_execution(production, variant, object):
+	hideDialogBox()
+	$HTTPRequest.post_new_world(world, production, variant, object)
+	clean_scene()
+
+func clean_scene():
 	hideDialogBox()
 	remove_child(player)
 	player = null
@@ -160,7 +210,6 @@ func showDialogBox(id, object):
 			if String(location_variant[0]["WorldNodeId"]) == current_location_id:
 				var option = load("res://DialogBox/DialogOption.tscn").instance()
 				dialog_box.addOption(option)
-#				option.rect_min_size = Vector2(20, 300)
 				option.set_text(location_variant[2]["WorldNodeName"])
 				option.set_variant(location_variant)
 				option.set_production(location_change_production)
@@ -168,21 +217,18 @@ func showDialogBox(id, object):
 	else:
 		for production in object.get_productions():
 			for variant in production["variants"]:
-	#			print(production["prod"]["Title"])
 				var option = load("res://DialogBox/DialogOption.tscn").instance()
 				dialog_box.addOption(option)
 				var personalised_desc = personalise_description(production["prod"]["Description"], variant)
-#				print(personalised_desc, variant)
 				option.set_text(personalised_desc)
 				option.set_variant(variant)
 				option.set_production(production)
 				option.connect("production_execution", self, "_production_execution")
-				
 	dialog_box.show()
 	
 func hideDialogBox():
-#	print("hide dialog box")
-	player.is_dialog_open = false
+	if player != null:
+		player.is_dialog_open = false
 	if dialog_box != null:
 		dialog_box.hide()
 		remove_child(dialog_box)
@@ -191,7 +237,15 @@ func hideDialogBox():
 func _slot_filled(slot, path):
 	player._slot_filled(slot, path)
 
-func _get_world(world):
+func _get_world(world, status):
+	if status == "lost":
+		var game_over_box = load("res://DialogBox/GameOverBox.tscn").instance()
+		var center = Global.camera.get_camera_screen_center()
+		add_child(game_over_box)
+		print(game_over_box.global_position)
+		game_over_box.global_position = center
+		clean_scene()
+		return
 	self.world = world.duplicate(true)
 	
 	var first_location = getFirstLocation(world)
@@ -204,11 +258,6 @@ func _get_world(world):
 	for location in world:
 		if destination_ids.has(location["Id"]):
 			available_locations[location["Name"]] = location
-		if location.has("Items"):
-			ItemDB.build_items_from_characters(location["Items"])
-
-	characters_positions = {}
-	items_positions = {}
 	
 	current_location_id = first_location["Id"]
 	add_characters(first_location["Characters"])
@@ -217,49 +266,151 @@ func _get_world(world):
 	
 	set_map_title(first_location["Name"])
 
-func _get_productions(all_productions):
-	for production in all_productions:
-		if "location change" in production["prod"]["Title"].to_lower():
-			location_change_production = production
+func _get_productions(all_productions, location_info):
+#	for production in all_productions:
+#		if "location change" in production["prod"]["Title"].to_lower():
+#			location_change_production = production
 	self.all_productions = all_productions
+	new_get_productions_for_characters(all_productions, location_info["characters"], location_info["items"])
 
+# wyciąganie postaci tylko w aktualnej lokacji, iterowanie po nich, przypisanie produkcji 
+# do postaci, pozniej 
+# wyciągnięcie produkcji location_change, na koniec podpisanie pozostałych produkcji do bohatera
+
+func new_get_productions_for_characters(all_productions, location_characters, location_items):
+	var duped_all_productions = all_productions.duplicate(true)
+	var productions_dictionary = {}
+	
+	for item in location_items:
+#		najpierw iterować po itemach potem po postaciach bo gdy najpierw to zostanie wykonane 
+#		to te produkcje które powinny zostać przypisane do przedmiotów to zostaną przypisane 
+#		do postaci
+		var item_productions = []
+		var item_name = item["name"].to_lower()
+		for production in duped_all_productions:
+			var item_id
+			var check = check_if(item_name, production["variants"])
+			var check_if = check[0]
+#			print(check_if)
+			var WorldNodeId = check[1]
+			if check_if:
+				if item_productions.find(production) == -1:
+					item_id = WorldNodeId
+					item_productions.append(production)
+					duped_all_productions.erase(production)
+				else:
+					duped_all_productions.erase(production)
+					duped_all_productions.push_back(production)
+			productions_dictionary[item_id] = item_productions
+			
+#	for p in duped_all_productions:
+#		print("\n", p["prod"]["Title"], ":  ", p)
+	for character in location_characters:
+		if character["name"] == "main_hero":
+			location_characters.erase(character)
+			location_characters.push_back(character)
+			break
+			
+	for character in location_characters:
+		var character_productions = []
+		var character_name = character["name"].to_lower()
+#		print("\n", character_name)
+#		var count = 0
+		var not_compatible_productions = []
+		while len(duped_all_productions) != 0:
+			var production = duped_all_productions[0]
+#		for production in duped_all_productions:
+			var production_title = production["prod"]["Title"].to_lower()
+#			print(production_title)
+#			count += 1
+#			if production_title == "deleting the group / rozgrupowanie bohaterów":
+#				print("Item acquisition")
+			if "teleportation" in production_title:
+				duped_all_productions.erase(production)
+				continue
+			if "location change" in production_title:
+				location_change_production = production
+				duped_all_productions.erase(production)
+				continue
+			
+			var character_id
+			var check = check_if(character_name, production["variants"])
+			var check_if = check[0]
+#			print(check_if)
+			var WorldNodeId = check[1]
+			if check_if:
+				if character_productions.find(production) == -1:
+					character_id = WorldNodeId
+					character_productions.append(production)
+					duped_all_productions.erase(production)
+			else:
+				if len(duped_all_productions) != len(not_compatible_productions):
+					not_compatible_productions.append(production)
+				else:
+					break
+				duped_all_productions.erase(production)
+				duped_all_productions.push_back(production)
+				
+#			for variant in production["variants"]:
+#				for node in variant:
+#					var nodeName = node["WorldNodeName"].to_lower()
+#					if character_name == nodeName:
+#						if character_productions.find(production) == -1:
+#							character_id = node["WorldNodeId"]
+#							character_productions.append(production)
+#							duped_all_productions.erase(production)
+			productions_dictionary[character_id] = character_productions
+	
+	new_productions = productions_dictionary
+	
+	for a in productions_dictionary:
+		print("\n count ", len(productions_dictionary[a]))
+		for b in productions_dictionary[a]:
+			print("\n")
+			print(b["prod"]["Title"])
+	print("")
+
+func check_if(character_name, variants):
+	for variant in variants:
+		for node in variant:
+			var nodeName = node["WorldNodeName"].to_lower()
+			if character_name == nodeName:
+				return [true, node["WorldNodeId"]]
+		return [false, ""]
+		
 func get_productions_for_characters():
 	var productions_to_return = {}
 	var characterss = Global.characters
-#	print(characterss, "\n")
 	for production in all_productions:
 		for variant in production["variants"]:
-			for node in variant:
-				var WorldNodeId = node["WorldNodeId"]
-#				print(node["WorldNodeName"], "\n")
-				if Global.is_character(WorldNodeId):
-					if productions_to_return.has(WorldNodeId):
-						productions_to_return[WorldNodeId].append(production)
-					else:
-						productions_to_return[WorldNodeId] = [production]
+			var array = check_if_production_is_matching(variant)
+			var is_matchng = array[0]
+			var WorldNodeId = array[1]
+			if is_matchng:
+				if productions_to_return.has(WorldNodeId):
+					productions_to_return[WorldNodeId].append(production)
+				else:
+					productions_to_return[WorldNodeId] = [production]
+				continue
 	return  productions_to_return
-
-#func get_productions_only_for_player():
-#	var productions_to_return = []
-#	for production in player_productions:
-#		var is_there_proper_value = false
-#		for variant in production["variants"]:
-#			for node in variant:
-#				var WorldNodeId = node["WorldNodeId"]
-#				if Global.main_hero_id == WorldNodeId:
-#					is_there_proper_value = true
-#		if is_there_proper_value == true:
-#			productions_to_return.append(production)
-#	return productions_to_return
+	
 	# wywalić itemy z production_to_return
 	# przepisać wyciąganie produkcji dla przedmiotów tylko w lokacji, a nie te które posiadają postacie
 	# ignorować wszystkie produkcje z tytułem "location change"
 	# ignorowanie wszystkich produkcji z tytułem "teleportation", ale to łatwego odkomentowania
-
+func check_if_production_is_matching(variant):
+	var WorldNodeId
+	for node in variant:
+		WorldNodeId = node["WorldNodeId"]
+		if Global.is_character(WorldNodeId):
+			return [true, WorldNodeId]
+	return [false, WorldNodeId]
 # dopisanie wyświetlania atrybutów dla przedmiotów 
 # trzymać tytuły produkcji walka zakonczona smiercia gracza i jedzenie/nutrition w configu
 # a dla bandytów, walka zakonczona smiercią przeciwnika(rzucą się tylko gdy maja przewage)
-#sprawdzanie czy w świecie jest smok i bandyta, jak tak to postuje ze smokiem jako objectem, i wykonuję  
+#sprawdzanie czy w świecie jest smok i bandyta, jak tak to postuje ze smokiem jako objectem, i wykonuję 
+
+# Iteruje po wszystkich przedmiotach znajdująćych się w ItemDB i zwraca produkcje z nimi związane 
 func get_productions_for_items():
 	var productions_to_return = {}
 	for production in all_productions:
@@ -273,18 +424,12 @@ func get_productions_for_items():
 					else:
 						productions_to_return[WorldNodeId] = [production]
 	return  productions_to_return
-	
+
+# personalizuje opis produkcji, zastępując placeholder między "«" a "»"
 func personalise_description(description, variant):
-	var descdription_to_return = description
-	var stop_pair = [
-		"«", "»"
-	]
+	var description_to_return = description
 	for node in variant:
-		var __position = descdription_to_return.find(stop_pair[0])
-		var position__ = descdription_to_return.find(stop_pair[1])
-		var length = position__ - __position
-		var substr = descdription_to_return.substr(__position, length + 1)
-		var dasdad = descdription_to_return.substr(__position, length)
-		if node["LSNodeRef"] == descdription_to_return.substr(__position + 1, length - 1):
-			descdription_to_return = descdription_to_return.replace(substr, node["WorldNodeName"])
-	return descdription_to_return.replace("(", "").replace(")", "")
+		var LSNodeRef = "«" + node["LSNodeRef"] + "»"
+		var WorldNodeName = node["WorldNodeName"]
+		description_to_return = description_to_return.replace(LSNodeRef, WorldNodeName)
+	return description_to_return.replace("(", "").replace(")", "")

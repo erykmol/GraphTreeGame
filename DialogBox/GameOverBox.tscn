@@ -1,44 +1,14 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://DialogBox/DialogBox.gd" type="Script" id=1]
 [ext_resource path="res://BobloxClassic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://menu_section_9patch.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 17
+size = 42
 font_data = ExtResource( 2 )
 
 [sub_resource type="Animation" id=2]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:percent_visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-
-[sub_resource type="Animation" id=3]
-resource_name = "TextDialog"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:percent_visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 1.0 ]
-}
-
-[sub_resource type="Animation" id=4]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rect_scale")
@@ -53,7 +23,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 1.1, 1.1 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rect_scale")
@@ -108,19 +78,21 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Dialog_Box/NinePatchRect/MarginContainer"]
+anchor_top = 0.252
+anchor_bottom = 0.252
 margin_right = 688.0
 margin_bottom = 160.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
-text = "Test Text"
-percent_visible = 0.0
+text = "Koniec Gry
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Dialog_Box/NinePatchRect/MarginContainer/Label"]
-anims/RESET = SubResource( 2 )
-anims/TextDialog = SubResource( 3 )
+"
+align = 1
+valign = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Dialog_Box/NinePatchRect/MarginContainer"]
+visible = false
 margin_right = 688.0
 margin_bottom = 160.0
 rect_min_size = Vector2( 688, 160 )
@@ -131,6 +103,7 @@ margin_bottom = 160.0
 rect_min_size = Vector2( 688, 160 )
 
 [node name="Speaker_NinePatchRect" type="NinePatchRect" parent="Dialog_Box/NinePatchRect"]
+visible = false
 margin_left = -21.0
 margin_top = -18.0
 margin_right = 159.0
@@ -148,6 +121,8 @@ __meta__ = {
 [node name="Speaker_Label" type="Label" parent="Dialog_Box/NinePatchRect/Speaker_NinePatchRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 0.943878
+margin_right = 53.9439
 custom_fonts/font = SubResource( 1 )
 text = "Speaker"
 align = 1
@@ -189,5 +164,5 @@ __meta__ = {
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Dialog_Box/NinePatchRect/Spacebar_NinePatchRect"]
 autoplay = "PressSpaceBar"
-anims/PressSpaceBar = SubResource( 4 )
-anims/RESET = SubResource( 5 )
+anims/PressSpaceBar = SubResource( 2 )
+anims/RESET = SubResource( 3 )

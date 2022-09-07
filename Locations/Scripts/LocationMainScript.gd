@@ -8,8 +8,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	Global.player.global_position = Vector2(256, 530)
-	add_child(Global.player)
+	pass
+#	Global.player.global_position = Vector2(256, 530)
+#	add_child(Global.player)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -9,6 +9,7 @@ var current_location
 var characters = []
 var location_items
 var main_hero_id
+var camera: Camera2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

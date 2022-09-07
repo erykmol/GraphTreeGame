@@ -16,7 +16,6 @@ func get_world():
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 
-
 func post_new_world(world, production, variant, object):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -27,13 +26,11 @@ func post_new_world(world, production, variant, object):
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 
-
 func get_map(world):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	http_request.connect("request_completed", self, "_get_map_http_request_completed")
 	var body = JSON.print({"whole": world})
-#	print(body)
 	var headers = ["Content-Type: application/json"]
 	var error = http_request.request("http://127.0.0.1:8000/generateMap", headers, false, HTTPClient.METHOD_POST, body)
 	if error != OK:
@@ -42,11 +39,23 @@ func get_map(world):
 # Called when the HTTP request is completed.
 func _http_request_completed(result, response_code, headers, body):
 	var response = parse_json(body.get_string_from_utf8())
-	var world = response["world"]
-#	print("world: ",response["available_productions"])
-	get_map(world)
-	emit_signal("get_productions", response["available_productions"])
-	emit_signal("get_world", world)
+	print("response   ", JSON.print(response["location_info"]))
+	var game_status
+	if response.has("game_status"):
+		game_status = response["game_status"]
+	else:
+		game_status = "lost"
+	print("\nGAME STATE  ", game_status)
+	
+	if response.has("available_productions"):
+		emit_signal("get_productions", response["available_productions"], response["location_info"])
+	
+	if response.has("world"):
+		var world = response["world"]
+		get_map(world)
+		emit_signal("get_world", world, game_status)
+	else:
+		emit_signal("get_world", {}, game_status)
 
 func _get_map_http_request_completed(result, response_code, headers, body):
 	var image = Image.new()

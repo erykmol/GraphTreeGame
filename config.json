@@ -20,4 +20,20 @@
 	"beer_mug": {
 		"slot": "MAIN_HAND"
 	},
+	"enemies": {
+		"bandit1": {
+			"production_title": "Fight ending with character’s death / Walka zakończona śmiercią uczestnika"
+		},
+		"bandit2": {
+			"production_title": "Fight ending with character’s death / Walka zakończona śmiercią uczestnika"
+		},
+		"bandit3": {
+			"production_title": "Fight ending with character’s death / Walka zakończona śmiercią uczestnika"
+		},
+		"dragon": {
+			"production_title": "Fight ending with character’s death / Walka zakończona śmiercią uczestnika",
+			"nutrition_production_title": "Fight ending with character’s death / Walka zakończona śmiercią uczestnika"
+		}
+	},
+	"fight_production_title": "Fight ending with character’s"
 }

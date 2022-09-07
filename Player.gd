@@ -8,7 +8,7 @@ const UP_DIRECTION = Vector2.UP
 
 onready var health_bar = $HealthBar
 
-var speed = 6000
+var speed = 10000
 export var jump_strength = 1500
 export var maximum_jumps = 2
 export var double_jump_strength = 1200
@@ -47,14 +47,15 @@ func _physics_process(delta):
 		var _horizontal_direction = (
 			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 		)
-		_velocity.x = _horizontal_direction * speed
+		_velocity.x += _horizontal_direction * speed * delta
 		_velocity.y += gravity * delta
+		_velocity.x *= 0.9
 		
 		if _velocity.x > 0:
-			scale.x = scale.y * -1
+			$Node2D.scale.x = scale.y * -1
 			keycap.scale.x = scale.y * 1
 		elif _velocity.x < 0:
-			scale.x = scale.y * 1
+			$Node2D.scale.x = scale.y * 1
 			keycap.scale.x = scale.y * 1
 		
 		var _vertical_direction = Input.get_action_strength("ui_up")
@@ -62,6 +63,8 @@ func _physics_process(delta):
 			_velocity.y = -_vertical_direction * jump_strength
 			
 		_velocity = move_and_slide(_velocity, UP_DIRECTION)
+	
+	Global.camera.global_position.x = global_position.x
 
 func _on_Area2D_body_entered(body):
 	current_body_entered = body
@@ -84,11 +87,17 @@ func _process(delta):
 			return
 		
 	elif Input.is_action_just_pressed("self_interact"):
-		get_parent().showDialogBox("", self)
-		is_dialog_open = true
+		if is_dialog_open:
+			get_parent().hideDialogBox()
+			is_dialog_open = false
+			return
+		else:
+			get_parent().showDialogBox("", self)
+			is_dialog_open = true
 
 func fill_equipped_items():
-	for item in ItemDB.equipped_items:
+	for key in ItemDB.equipped_items:
+		var item = ItemDB.equipped_items[key]
 		_slot_filled(item["slot"], item["icon"])
 
 func _slot_filled(slot, path):
@@ -110,8 +119,9 @@ func load_inventory():
 		inventory_open = false
 	else:
 		inventory = load("res://InventoryUI.tscn").instance()
-		scale_inventory()
+#		scale_inventory()
 		add_child(inventory)
+		inventory.rect_position.y = global_position.y - 340
 		inventory_open = true
 
 func load_map():
@@ -121,25 +131,27 @@ func load_map():
 		map_open = false
 	else:
 		map = load("res://Map/Map.tscn").instance()
-		scale_map()
+#		scale_map()
 		add_child(map)
+		var center = Global.camera.get_camera_screen_center()
+		map.global_position = Vector2(center.x - 680, center.y * 1.85)
 		map_open = true
 		
-func scale_map():
-	var map_position = Vector2(700, -950)
-	if scale == Vector2(1, -1):
-		map.scale = Vector2(-1, 1)
-	else:
-		map_position = Vector2(-700, -950)
-	map.position = map_position
-
-func scale_inventory():
-	var inventory_position = Vector2(0, -300)
-	inventory.rect_position = inventory_position
-	if scale == Vector2(1, -1):
-		inventory.rect_scale = Vector2(-1, 1)
-	else:
-		inventory.rect_scale = Vector2(1, 1)
+#func scale_map():
+#	var map_position = Vector2(700, -950)
+#	if scale == Vector2(1, -1):
+#		map.scale = Vector2(-1, 1)
+#	else:
+#		map_position = Vector2(-700, -950)
+#	map.position = map_position
+#
+#func scale_inventory():
+#	var inventory_position = Vector2(0, -300)
+#	inventory.rect_position = inventory_position
+#	if scale == Vector2(1, -1):
+#		inventory.rect_scale = Vector2(-1, 1)
+#	else:
+#		inventory.rect_scale = Vector2(1, 1)
 		
 func damage(amount):
 	_set_health(health - amount)
@@ -148,6 +160,7 @@ func _set_health(value):
 	var previous_health = health
 	health = clamp(value, 0, max_health)
 	health_bar.value = health
+	$HealthBar/Label.text = String(health)
 	if health != previous_health:
 		if health == 0:
 			emit_signal("killed")

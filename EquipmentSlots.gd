@@ -46,3 +46,18 @@ func get_thing_under_pos(arr, pos):
 		if thing != null and thing.get_global_rect().has_point(pos):
 			return thing
 	return null
+
+func insert_item_for_slot(item, slot):
+	if slot == "HEAD":
+		pass
+	if slot == "CHEST":
+		item.rect_global_position = $CHEST.rect_global_position + $CHEST.rect_size / 2 - item.rect_size / 2
+#		$CHEST.texture = load(path)
+	if slot == "LEGS":
+		pass
+	if slot == "MAIN_HAND":
+		item.rect_global_position = $MAIN_HAND.rect_global_position + $MAIN_HAND.rect_size / 2 - item.rect_size / 2
+#		$MAIN_HAND.texture = load(path)
+	if slot == "OFF_HAND":
+		item.rect_global_position = $OFF_HAND.rect_global_position + $OFF_HAND.rect_size / 2 - item.rect_size / 2
+#		$OFF_HAND.texture = load(path)
