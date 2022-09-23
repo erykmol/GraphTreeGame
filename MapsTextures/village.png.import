@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/village.jpg-95de8bfc186e7812d4464e8ef6f146e0.stex"
+path="res://.import/village.png-a963b0011a9f7785c2c5360296f8b62c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://MapsTextures/village.jpg"
-dest_files=[ "res://.import/village.jpg-95de8bfc186e7812d4464e8ef6f146e0.stex" ]
+source_file="res://MapsTextures/village.png"
+dest_files=[ "res://.import/village.png-a963b0011a9f7785c2c5360296f8b62c.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

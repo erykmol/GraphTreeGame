@@ -14,6 +14,7 @@ var _jumps_made = 0
 var _velocity = Vector2.ZERO
 
 onready var productions = []
+onready var variants = []
 var is_in_party = false
 
 # Called when the node enters the scene tree for the first time.

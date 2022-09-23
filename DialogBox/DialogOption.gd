@@ -5,6 +5,7 @@ signal production_execution
 
 var variant
 var production
+var fighting_productions = []
 
 onready var label = $Label
 

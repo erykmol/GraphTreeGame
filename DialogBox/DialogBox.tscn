@@ -131,6 +131,7 @@ margin_bottom = 160.0
 rect_min_size = Vector2( 688, 160 )
 
 [node name="Speaker_NinePatchRect" type="NinePatchRect" parent="Dialog_Box/NinePatchRect"]
+visible = false
 margin_left = -21.0
 margin_top = -18.0
 margin_right = 159.0
