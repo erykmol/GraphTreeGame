@@ -27,7 +27,6 @@ func _ready():
 	
 	for item in ItemDB.gathered_items:
 		pickup_item(item)
-	pickup_item(ItemDB.get_item("Error"))
 	equipment_slots.connect("slot_filled", self, "_slot_filled")
 
 func _process(delta):
