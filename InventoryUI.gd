@@ -15,7 +15,6 @@ var text_box
 
 func _ready():
 	var player = get_parent()
-	print(ItemDB.equipped_items)
 	for key in ItemDB.equipped_items.keys():
 		var item_object = ItemDB.equipped_items[key]
 		var item_id = item_object["Name"]
@@ -28,6 +27,8 @@ func _ready():
 	for item in ItemDB.gathered_items:
 		pickup_item(item)
 	equipment_slots.connect("slot_filled", self, "_slot_filled")
+	text_box = load("res://TextBox.tscn").instance()
+	add_child(text_box)
 
 func _process(delta):
 	var cursor_pos = get_global_mouse_position()
@@ -44,8 +45,6 @@ func show_textBox(cursor_pos):
 	var a = grid_backpack.get_item_under_pos(cursor_pos)
 	var b = equipment_slots.get_item_under_pos(cursor_pos)
 #	var c = get_container_under_cursor(cursor_pos)
-	if text_box == null:
-		text_box = load("res://TextBox.tscn").instance()
 		
 	if a != null:
 		set_data_for_text_box(a)
@@ -54,8 +53,7 @@ func show_textBox(cursor_pos):
 		set_data_for_text_box(b)
 		display_text_box(b, cursor_pos)
 	else:
-		remove_child(text_box)
-		text_box = null
+		text_box.hide()
 		
 func set_data_for_text_box(item_object):
 	var item = ItemDB.get_item(item_object.get_meta("id"))
@@ -68,8 +66,9 @@ func set_data_for_text_box(item_object):
 
 func display_text_box(item_object, cursor_pos):
 	text_box.rect_global_position = cursor_pos
-	if text_box.get_parent() == null:
-		add_child(text_box)
+	text_box.show()
+#	if text_box.get_parent() == null:
+#		add_child(text_box)
 		
 func grab(cursor_pos):
 	var c = get_container_under_cursor(cursor_pos)

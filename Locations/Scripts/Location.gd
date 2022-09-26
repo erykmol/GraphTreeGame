@@ -221,7 +221,8 @@ func showDialogBox(id, object):
 			var fight_productions = handle_fighting_productions(productions)
 			var option = load("res://DialogBox/DialogOption.tscn").instance()
 			dialog_box.addOption(option)
-			var personalised_desc = "Walka"
+			var split_id = id.split("_")
+			var personalised_desc = "Walka z " + split_id[1]
 			option.set_text(personalised_desc)
 			option.set_fight_productions(fight_productions)
 			option.connect("production_execution", self, "_production_execution")
