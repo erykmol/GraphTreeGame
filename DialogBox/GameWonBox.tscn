@@ -72,7 +72,7 @@ anchor_bottom = 1.0
 margin_left = 16.0
 margin_top = 48.0
 margin_right = -16.0
-margin_bottom = -48.0
+margin_bottom = -27.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -85,7 +85,7 @@ size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
 text = "Koniec Gry
 
-Przegrana
+Wygrana
 "
 align = 1
 valign = 1

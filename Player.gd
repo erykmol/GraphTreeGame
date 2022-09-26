@@ -92,7 +92,7 @@ func _process(delta):
 			is_dialog_open = false
 			return
 		else:
-			get_parent().showDialogBox("", self)
+			get_parent().showDialogBox("main_character", self)
 			is_dialog_open = true
 
 func fill_equipped_items():

@@ -23,8 +23,6 @@ var characters_positions = {}
 var items_positions = {}
 
 var main_character_id
-var main_character_name
-
 
 onready var enemies = ItemDB._get_config()["enemies"]
 onready var fight_production_title = ItemDB._get_config()["fight_production_title"]
@@ -73,8 +71,9 @@ func add_characters(characters):
 			player = scene.instance()
 			player.connect("item_picked", self, "_item_picked")
 			ItemDB.clean_gathered_items()
-			for item in character["Items"]:
-				ItemDB.gather_item(item["Name"].to_lower())
+			if character.has("Items"):
+				for item in character["Items"]:
+					ItemDB.gather_item(item["Name"].to_lower())
 			add_child(player)
 			var player_health = character["Attributes"]["HP"]
 			player.max_health = player_health
@@ -83,7 +82,6 @@ func add_characters(characters):
 			
 			player.productions = player_productions
 			if characters_positions.has(main_character_id):
-				print(characters_positions[main_character_id])
 				player.global_position = characters_positions[main_character_id]
 			else:
 				var character_global_position = Vector2(256, -200)
@@ -102,6 +100,7 @@ func add_characters(characters):
 		position_x += 250
 		add_child(characterInstance)
 		characterInstance.set_productions(characters_productions[character["Id"]])
+		characterInstance.set_meta("id", "character_" + character["Name"])
 		
 		var timer = Timer.new()
 		add_child(timer)
@@ -110,7 +109,7 @@ func add_characters(characters):
 		timer.connect("timeout", self, "execute_timer_production", [character, characters_productions, main_character_id])
 
 func get_character_model(directory, character):
-	var character_name = character["Name"]
+	var character_name = character["Name"].to_lower()
 	var path = "res://Characters/" + character_name + "/" + character_name + ".tscn"
 	var fileExists = directory.file_exists(path)
 	var scene
@@ -148,11 +147,11 @@ func add_items(items):
 			var item_name = item["Name"].to_lower()
 			var itemDB_item = ItemDB.get_item(item_name)
 			itemInstance.set_meta("scene_name", "ItemObject")
-			itemInstance.set_meta("id", item_name)
+			itemInstance.set_meta("id", "item_" + item_name)
 			itemInstance.get_child(2).texture = load(itemDB_item["icon"])
 			var collisionShape = itemInstance.get_child(1).get_child(0)
 			collisionShape.set_disabled(false)
-			var item_global_position = Vector2(position_x, -540)
+			var item_global_position = Vector2(position_x, -200)
 			if items_positions.has(item_name):
 				itemInstance.global_position = items_positions[item_name]
 			else:
@@ -206,7 +205,10 @@ func showDialogBox(id, object):
 				option.set_production(location_change_production)
 				option.connect("location_change", self, "_location_change")
 	else:
-		for production in object.get_productions():
+		var productions = object.get_productions()
+		for production in productions:
+			if "fight" in production["production"]["prod"]["Title"].to_lower():
+				continue
 			for variant in production["variants"]:
 				var option = load("res://DialogBox/DialogOption.tscn").instance()
 				dialog_box.addOption(option)
@@ -215,15 +217,23 @@ func showDialogBox(id, object):
 				option.set_variant(variant)
 				option.set_production(production)
 				option.connect("production_execution", self, "_production_execution")
+		if id != "main_character" && id.find("item") == -1:
+			var fight_productions = handle_fighting_productions(productions)
+			var option = load("res://DialogBox/DialogOption.tscn").instance()
+			dialog_box.addOption(option)
+			var personalised_desc = "Walka"
+			option.set_text(personalised_desc)
+			option.set_fight_productions(fight_productions)
+			option.connect("production_execution", self, "_production_execution")
+			
 	dialog_box.show()
 
 func handle_fighting_productions(productions):
+	var fight_productions = []
 	for production in productions:
 		if "fight" in production["production"]["prod"]["Title"].to_lower():
-			pass
-			
-func check_if_fighting_production(production_title):
-	pass
+			fight_productions.append(production)
+	return fight_productions
 	
 func hideDialogBox():
 	if player != null:
@@ -379,4 +389,4 @@ func personalise_description(description, variant):
 		var LSNodeRef = "«" + node["LSNodeRef"] + "»"
 		var WorldNodeName = node["WorldNodeName"]
 		description_to_return = description_to_return.replace(LSNodeRef, WorldNodeName)
-	return description_to_return.replace("(", "").replace(")", "")
+	return description_to_return.replace("(", "").replace(")", "").replace("_", " ")
