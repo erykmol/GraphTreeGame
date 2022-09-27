@@ -36,7 +36,7 @@ func _on_Button_pressed():
 			var variants = only_production["production"]["variants"]
 			var variants_count = len(variants)
 			var nums = []
-			for i in variants_count - 1:
+			for i in variants_count:
 				for node in variants[i]:
 						if node["WorldNodeName"] == characterId:
 							nums.append(i)
@@ -53,11 +53,16 @@ func _on_Button_pressed():
 				var variants = ending_with_death_production["production"]["variants"]
 				var variants_count = len(variants)
 				var nums = []
-				for i in variants_count -1:
+				for i in variants_count:
 					for node in variants[i]:
+						print("WorldNodeName fight", node["WorldNodeName"], " ", node["WorldNodeName"] == characterId)
 						if node["WorldNodeName"] == characterId:
 							nums.append(i)
-				var variant_index = nums[randi() % nums.size()]
+				var nums_size = nums.size()
+				randomize()
+				prints(randi(), nums_size)
+				var chosen_index = randi() % nums.size()
+				var variant_index = nums[chosen_index]
 				production_to_execute = ending_with_death_production["production"]
 				variant_to_execute = variants[variant_index]
 			else:
@@ -68,7 +73,7 @@ func _on_Button_pressed():
 				var variants = ending_with_escape_production["production"]["variants"]
 				var variants_count = len(variants)
 				var nums = []
-				for i in variants_count - 1:
+				for i in variants_count:
 					for node in variants[i]:
 						if node["WorldNodeName"] == characterId:
 							nums.append(i)

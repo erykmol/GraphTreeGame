@@ -28,6 +28,7 @@ onready var enemies = ItemDB._get_config()["enemies"]
 onready var fight_production_title = ItemDB._get_config()["fight_production_title"]
 
 func _ready():
+	randomize()
 	$HTTPRequest.connect("get_world", self, "_get_world")
 	$HTTPRequest.connect("get_productions", self, "_get_productions")
 	$HTTPRequest.get_world()
