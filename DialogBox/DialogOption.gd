@@ -6,6 +6,7 @@ signal production_execution
 var variant
 var production
 var fighting_productions = []
+var characterId
 
 onready var label = $Label
 
@@ -21,8 +22,9 @@ func set_variant(variant):
 func set_production(production):
 	self.production = production
 
-func set_fight_productions(productions):
+func set_fight_productions(productions, characterId):
 	fighting_productions = productions
+	self.characterId = characterId
 	
 func _on_Button_pressed():
 	var text = label.text
@@ -34,8 +36,10 @@ func _on_Button_pressed():
 			var variants = only_production["production"]["variants"]
 			var variants_count = len(variants)
 			var nums = []
-			for i in variants_count:
-				nums.append(i)
+			for i in variants_count - 1:
+				for node in variants[i]:
+						if node["WorldNodeName"] == characterId:
+							nums.append(i)
 			var variant_index = nums[randi() % nums.size()]
 			production_to_execute = only_production["production"]
 			variant_to_execute = variants[variant_index]
@@ -49,8 +53,10 @@ func _on_Button_pressed():
 				var variants = ending_with_death_production["production"]["variants"]
 				var variants_count = len(variants)
 				var nums = []
-				for i in variants_count:
-					nums.append(i)
+				for i in variants_count -1:
+					for node in variants[i]:
+						if node["WorldNodeName"] == characterId:
+							nums.append(i)
 				var variant_index = nums[randi() % nums.size()]
 				production_to_execute = ending_with_death_production["production"]
 				variant_to_execute = variants[variant_index]
@@ -62,8 +68,10 @@ func _on_Button_pressed():
 				var variants = ending_with_escape_production["production"]["variants"]
 				var variants_count = len(variants)
 				var nums = []
-				for i in variants_count:
-					nums.append(i)
+				for i in variants_count - 1:
+					for node in variants[i]:
+						if node["WorldNodeName"] == characterId:
+							nums.append(i)
 				var variant_index = nums[randi() % nums.size()]
 				production_to_execute = ending_with_escape_production["production"]
 				variant_to_execute = variants[variant_index]

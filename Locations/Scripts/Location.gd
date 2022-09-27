@@ -224,7 +224,7 @@ func showDialogBox(id, object):
 			var split_id = id.split("_")
 			var personalised_desc = "Walka z " + split_id[1]
 			option.set_text(personalised_desc)
-			option.set_fight_productions(fight_productions)
+			option.set_fight_productions(fight_productions, split_id)
 			option.connect("production_execution", self, "_production_execution")
 			
 	dialog_box.show()
@@ -252,7 +252,6 @@ func _get_world(world, status):
 		var game_over_box = load("res://DialogBox/GameOverBox.tscn").instance()
 		var center = Global.camera.get_camera_screen_center()
 		add_child(game_over_box)
-		print(game_over_box.global_position)
 		game_over_box.global_position = center
 		clean_scene()
 		return
@@ -261,25 +260,42 @@ func _get_world(world, status):
 func _get_productions(all_productions, location_info, main_character_id):
 	self.all_productions = all_productions
 	self.main_character_id = main_character_id
-	new_get_productions_for_characters(all_productions, location_info)
-	
 	var first_location = getFirstLocation(world, location_info["main_location_id"])
-	var connections_available = first_location["Connections"]
-	var destination_ids = []
-	for connection in connections_available:
-		destination_ids.append(connection["Destination"])
+	if !check_if_player_won(first_location):
+		new_get_productions_for_characters(all_productions, location_info)
 		
-	ItemDB.build_items_from_locations(world)
-	for location in world:
-		if destination_ids.has(location["Id"]):
-			available_locations[location["Name"]] = location
-	
-	current_location_id = first_location["Id"]
-	add_characters(first_location["Characters"])
-	if first_location.has("Items"):
-		add_items(first_location["Items"])
+		var connections_available = first_location["Connections"]
+		var destination_ids = []
+		for connection in connections_available:
+			destination_ids.append(connection["Destination"])
+			
+		ItemDB.build_items_from_locations(world)
+		for location in world:
+			if destination_ids.has(location["Id"]):
+				available_locations[location["Name"]] = location
+		
+		current_location_id = first_location["Id"]
+		add_characters(first_location["Characters"])
+		if first_location.has("Items"):
+			add_items(first_location["Items"])
 
-	set_location_background(first_location["Name"])
+		set_location_background(first_location["Name"])
+
+func check_if_player_won(location):
+	if location.has("Characters"):
+		for character in location["Characters"]:
+			if character["Id"] == main_character_id:
+				if character.has("Items"):
+					for item in character["Items"]:
+						var item_name = item["Name"].to_lower()
+						if "dragon" in item_name && "egg" in item_name:
+							var game_won_box = load("res://DialogBox/GameWonBox.tscn").instance()
+							var center = Global.camera.get_camera_screen_center()
+							add_child(game_won_box)
+							game_won_box.global_position = center
+							return true
+		return false
+	return false
 
 # wyciąganie postaci tylko w aktualnej lokacji, iterowanie po nich, przypisanie produkcji 
 # do postaci, pozniej 
