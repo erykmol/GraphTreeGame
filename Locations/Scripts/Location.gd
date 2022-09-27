@@ -224,7 +224,7 @@ func showDialogBox(id, object):
 			var split_id = id.split("_")
 			var personalised_desc = "Walka z " + split_id[1]
 			option.set_text(personalised_desc)
-			option.set_fight_productions(fight_productions, split_id)
+			option.set_fight_productions(fight_productions, split_id[1])
 			option.connect("production_execution", self, "_production_execution")
 			
 	dialog_box.show()
