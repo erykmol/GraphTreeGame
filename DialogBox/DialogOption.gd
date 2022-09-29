@@ -55,12 +55,10 @@ func _on_Button_pressed():
 				var nums = []
 				for i in variants_count:
 					for node in variants[i]:
-						print("WorldNodeName fight", node["WorldNodeName"], " ", node["WorldNodeName"] == characterId)
 						if node["WorldNodeName"] == characterId:
 							nums.append(i)
 				var nums_size = nums.size()
 				randomize()
-				prints(randi(), nums_size)
 				var chosen_index = randi() % nums.size()
 				var variant_index = nums[chosen_index]
 				production_to_execute = ending_with_death_production["production"]

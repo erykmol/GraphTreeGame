@@ -15,11 +15,7 @@ func show():
 	
 func hide():
 	get_child(0).visible = false
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 func addOption(option):
 	option.rect_size.y = 51
 	vBoxContainer.add_child(option)
-#	print(vBoxContainer.rect_size)

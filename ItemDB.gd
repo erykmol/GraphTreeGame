@@ -92,7 +92,6 @@ func check_if_item_is_equipped(item):
 		var item_slot = item["slot"]
 		if equipped_items.has(item_slot):
 			var equipped_item_id = equipped_items[item_slot]["Id"]
-			print("ileż można ",equipped_item_id, item["Id"], equipped_item_id == item["Id"]) 
 			return equipped_item_id == item["Id"]
 		else:
 			return false

@@ -156,11 +156,23 @@ func add_items(items):
 			if items_positions.has(item_name):
 				itemInstance.global_position = items_positions[item_name]
 			else:
+				var is_too_close = check_is_too_close(item_global_position)
+				if is_too_close:
+					position_x += 320
+					item_global_position = Vector2(position_x, -200) 
 				itemInstance.global_position = item_global_position
 				items_positions[item_name] = item_global_position
 			position_x += 200
 			add_child(itemInstance)
 			itemInstance.set_productions(items_productions[item["Id"]])
+
+func check_is_too_close(position):
+	var too_close = false
+	for key in characters_positions:
+		var char_position_x = characters_positions[key].x
+		if abs(position.x - char_position_x) < 100:
+			too_close = true
+	return too_close
 
 func _item_picked(item):
 	remove_child(item)
