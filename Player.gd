@@ -151,6 +151,12 @@ func load_map():
 #		inventory.rect_scale = Vector2(-1, 1)
 #	else:
 #		inventory.rect_scale = Vector2(1, 1)
+
+func hide_health_bar(flag):
+	if flag:
+		$HealthBar.hide()
+	else:
+		$HealthBar.show()
 		
 func damage(amount):
 	_set_health(health - amount)

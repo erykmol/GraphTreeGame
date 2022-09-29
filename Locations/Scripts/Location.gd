@@ -23,6 +23,7 @@ var characters_positions = {}
 var items_positions = {}
 
 var main_character_id
+var main_character_name
 
 onready var enemies = ItemDB._get_config()["enemies"]
 onready var fight_production_title = ItemDB._get_config()["fight_production_title"]
@@ -76,9 +77,14 @@ func add_characters(characters):
 				for item in character["Items"]:
 					ItemDB.gather_item(item["Name"].to_lower())
 			add_child(player)
-			var player_health = character["Attributes"]["HP"]
-			player.max_health = player_health
-			player.health = player_health
+			if character.has("Attributes"):
+				var player_health = character["Attributes"]["HP"]
+				player.max_health = player_health
+				player.health = player_health
+				player.hide_health_bar(false)
+			else:
+				player.hide_health_bar(true)
+				
 			var player_productions = characters_productions[main_character_id]
 			
 			player.productions = player_productions
@@ -180,11 +186,11 @@ func _item_picked(item):
 func _location_change(production, location_variant):
 	characters_positions = {}
 	items_positions = {}
-	__production_execution(production, location_variant, "Main_hero")
+	__production_execution(production, location_variant, main_character_name)
 
 func _production_execution(production, variant):
 	characters_positions[main_character_id] = player.global_position
-	__production_execution(production, variant, "Main_hero")
+	__production_execution(production, variant, main_character_name)
 
 func __production_execution(production, variant, object):
 	hideDialogBox()
@@ -202,6 +208,10 @@ func clean_scene():
 func getFirstLocation(locations, main_location_id):
 	for location in locations:
 		if location["Id"] == main_location_id:
+			if location.has("Characters"):
+				for character in location["Characters"]:
+					if character["Id"] == main_character_id:
+						main_character_name = character["Name"]
 			return location
 
 func showDialogBox(id, object):
@@ -332,14 +342,12 @@ func new_get_productions_for_characters(all_productions, location_info):
 		var production_title = production["prod"]["Title"].to_lower()
 		if "teleportation" in production_title:
 			duped_all_productions.erase(production)
-			break
 		
 	for production in duped_all_productions:
 		var production_title = production["prod"]["Title"].to_lower()
 		if "location change" in production_title:
 			location_change_production = production
 			duped_all_productions.erase(production)
-			break
 	
 	for production in duped_all_productions:
 		for item in location_items:
