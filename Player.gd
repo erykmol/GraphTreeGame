@@ -43,7 +43,7 @@ func _ready():
 	fill_equipped_items()
 
 func _physics_process(delta):
-	if !inventory_open && !map_open:
+	if !inventory_open && !map_open && !is_dialog_open:
 		var _horizontal_direction = (
 			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 		)
@@ -53,9 +53,11 @@ func _physics_process(delta):
 		
 		if _velocity.x > 0:
 			$Node2D.scale.x = scale.y * -1
+			$ControlNode.rect_scale.x = scale.y * -1
 			keycap.scale.x = scale.y * 1
 		elif _velocity.x < 0:
 			$Node2D.scale.x = scale.y * 1
+			$ControlNode.rect_scale.x = scale.y * 1
 			keycap.scale.x = scale.y * 1
 		
 		var _vertical_direction = Input.get_action_strength("ui_up")
@@ -75,7 +77,7 @@ func _on_Area2D_body_exited(body):
 	keycap.visible = false
 
 func _process(delta):
-	if Input.is_action_just_pressed("interact"):
+	if Input.is_action_just_pressed("interact") && !inventory_open && !map_open:
 		if is_dialog_open:
 			get_parent().hideDialogBox()
 			is_dialog_open = false
@@ -85,7 +87,7 @@ func _process(delta):
 			is_dialog_open = true
 			return
 		
-	elif Input.is_action_just_pressed("self_interact"):
+	elif Input.is_action_just_pressed("self_interact") && !inventory_open && !map_open:
 		if is_dialog_open:
 			get_parent().hideDialogBox()
 			is_dialog_open = false
@@ -107,16 +109,16 @@ func _slot_filled(slot, path):
 	if slot == "LEGS":
 		pass
 	if slot == "MAIN_HAND":
-		get_child(5).texture = load(path)
+		$ControlNode/RightHand.texture = load(path)
 	if slot == "OFF_HAND":
-		get_child(6).texture = load(path)
+		$ControlNode/LeftHand.texture = load(path)
 
 func load_inventory():
 	if inventory_open:
 		remove_child(inventory)
 		inventory = null
 		inventory_open = false
-	else:
+	elif !map_open && !is_dialog_open:
 		inventory = load("res://InventoryUI.tscn").instance()
 #		scale_inventory()
 		add_child(inventory)
@@ -128,7 +130,7 @@ func load_map():
 		remove_child(map)
 		map = null
 		map_open = false
-	else:
+	elif !inventory_open && !is_dialog_open:
 		map = load("res://Map/Map.tscn").instance()
 #		scale_map()
 		add_child(map)

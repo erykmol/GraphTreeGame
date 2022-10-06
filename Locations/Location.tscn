@@ -7,7 +7,7 @@
 [ext_resource path="res://HTTPRequest.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 512, 10 )
+extents = Vector2( 512, 18.5 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 43, 213 )
@@ -28,7 +28,7 @@ centered = false
 position = Vector2( -8, -1104 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2( 550, 1090 )
+position = Vector2( 550, 1081.5 )
 scale = Vector2( 20, 1 )
 shape = SubResource( 1 )
 
@@ -69,6 +69,9 @@ rect_scale = Vector2( 3.76, 1 )
 texture = ExtResource( 4 )
 expand = true
 flip_h = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureRect2" type="TextureRect" parent="."]
 margin_left = 12063.0

@@ -60,7 +60,130 @@ func _process(delta):
 		player.load_map()
 
 var new_productions = {}
+
+func _get_world(world, status):
+	if status == "lost":
+		var game_over_box = load("res://DialogBox/GameOverBox.tscn").instance()
+		var center = Global.camera.get_camera_screen_center()
+		add_child(game_over_box)
+		game_over_box.global_position = center
+		clean_scene()
+		return
+	self.world = world.duplicate(true)
+
+func _get_productions(all_productions, location_info, main_character_id):
+	self.all_productions = all_productions
+	self.main_character_id = main_character_id
+	var first_location = getFirstLocation(world, location_info["main_location_id"])
+	if !check_if_player_won(first_location):
+		new_get_productions_for_characters(all_productions, location_info)
+		
+		var connections_available = first_location["Connections"]
+		var destination_ids = []
+		for connection in connections_available:
+			destination_ids.append(connection["Destination"])
+			
+		ItemDB.build_items_from_locations(world)
+		for location in world:
+			if destination_ids.has(location["Id"]):
+				available_locations[location["Name"]] = location
+		
+		current_location_id = first_location["Id"]
+		add_characters(first_location["Characters"])
+		if first_location.has("Items"):
+			add_items(first_location["Items"])
+
+		set_location_background(first_location["Name"])
+
+func check_if_player_won(location):
+	if location.has("Characters"):
+		for character in location["Characters"]:
+			if character["Id"] == main_character_id:
+				if character.has("Items"):
+					for item in character["Items"]:
+						var item_name = item["Name"].to_lower()
+						if "dragon" in item_name && "egg" in item_name:
+							var game_won_box = load("res://DialogBox/GameWonBox.tscn").instance()
+							var center = Global.camera.get_camera_screen_center()
+							add_child(game_won_box)
+							game_won_box.global_position = center
+							return true
+		return false
+	return false
+
+func new_get_productions_for_characters(all_productions, location_info):
+	var location_characters = []
+	var location_items = []
+	var location_id = location_info["main_location_id"]
+	for location in world:
+		if location["Id"] == location_id:
+			location_characters = location["Characters"]
+			if location.has("Items"):
+				location_items = location["Items"]
+			break
 	
+	var duped_all_productions = all_productions.duplicate(true)
+	var productions_dictionary = {}
+	
+	for production in duped_all_productions:
+		var production_title = production["prod"]["Title"].to_lower()
+		if "teleportation" in production_title:
+			duped_all_productions.erase(production)
+		
+	for production in duped_all_productions:
+		var production_title = production["prod"]["Title"].to_lower()
+		if "location change" in production_title:
+			location_change_production = production
+			duped_all_productions.erase(production)
+	
+	for production in duped_all_productions:
+		for item in location_items:
+			var item_productions = []
+			var item_id = item["Id"]
+			var production_dict = {
+				"production": production,
+				"variants": []
+			}
+			for variant in production["variants"]:
+				for node in variant:
+					if node["WorldNodeId"] == item_id || node["WorldNodeName"] == item_id:
+						production_dict["variants"].append(variant)
+			
+			if production_dict["variants"] != []:
+				if productions_dictionary.has(item_id):
+					productions_dictionary[item_id].append(production_dict)
+				else:
+					productions_dictionary[item_id] = [production_dict]
+	
+	for character in location_characters:
+		if character["Id"] == main_character_id:
+			location_characters.erase(character)
+			location_characters.push_back(character)
+			break
+		
+	for production in duped_all_productions:
+		for character in location_characters:
+			var character_id = character["Id"]
+			var production_dict = {
+				"production": production,
+				"variants": []
+			}
+			for variant in production["variants"]:
+				for node in variant:
+					if node["WorldNodeId"] == character_id || node["WorldNodeName"] == character_id:
+						if character_id == main_character_id:
+							if !check_if_more_objects_fit(production["variants"], location_characters, location_items):
+								production_dict["variants"].append(variant)
+						else:
+							production_dict["variants"].append(variant)
+							
+			if production_dict["variants"] != []:
+				if productions_dictionary.has(character_id):
+					productions_dictionary[character_id].append(production_dict)
+				else:
+					productions_dictionary[character_id] = [production_dict]
+	new_productions = productions_dictionary
+
 func add_characters(characters):
 	var position_x = 512
 	var directory = Directory.new();
@@ -155,17 +278,20 @@ func add_items(items):
 			var itemDB_item = ItemDB.get_item(item_name)
 			itemInstance.set_meta("scene_name", "ItemObject")
 			itemInstance.set_meta("id", "item_" + item_name)
+			var item_icon_height = load(itemDB_item["icon"]).get_height()
+			if item_icon_height > 32:
+				itemInstance.rotate(1.57079)
 			itemInstance.get_child(2).texture = load(itemDB_item["icon"])
 			var collisionShape = itemInstance.get_child(1).get_child(0)
 			collisionShape.set_disabled(false)
-			var item_global_position = Vector2(position_x, -200)
+			var item_global_position = Vector2(position_x, -50)
 			if items_positions.has(item_name):
 				itemInstance.global_position = items_positions[item_name]
 			else:
 				var is_too_close = check_is_too_close(item_global_position)
 				if is_too_close:
 					position_x += 320
-					item_global_position = Vector2(position_x, -200) 
+					item_global_position = Vector2(position_x, -50) 
 				itemInstance.global_position = item_global_position
 				items_positions[item_name] = item_global_position
 			position_x += 200
@@ -270,132 +396,6 @@ func hideDialogBox():
 func _slot_filled(slot, path):
 	player._slot_filled(slot, path)
 
-func _get_world(world, status):
-	if status == "lost":
-		var game_over_box = load("res://DialogBox/GameOverBox.tscn").instance()
-		var center = Global.camera.get_camera_screen_center()
-		add_child(game_over_box)
-		game_over_box.global_position = center
-		clean_scene()
-		return
-	self.world = world.duplicate(true)
-
-func _get_productions(all_productions, location_info, main_character_id):
-	self.all_productions = all_productions
-	self.main_character_id = main_character_id
-	var first_location = getFirstLocation(world, location_info["main_location_id"])
-	if !check_if_player_won(first_location):
-		new_get_productions_for_characters(all_productions, location_info)
-		
-		var connections_available = first_location["Connections"]
-		var destination_ids = []
-		for connection in connections_available:
-			destination_ids.append(connection["Destination"])
-			
-		ItemDB.build_items_from_locations(world)
-		for location in world:
-			if destination_ids.has(location["Id"]):
-				available_locations[location["Name"]] = location
-		
-		current_location_id = first_location["Id"]
-		add_characters(first_location["Characters"])
-		if first_location.has("Items"):
-			add_items(first_location["Items"])
-
-		set_location_background(first_location["Name"])
-
-func check_if_player_won(location):
-	if location.has("Characters"):
-		for character in location["Characters"]:
-			if character["Id"] == main_character_id:
-				if character.has("Items"):
-					for item in character["Items"]:
-						var item_name = item["Name"].to_lower()
-						if "dragon" in item_name && "egg" in item_name:
-							var game_won_box = load("res://DialogBox/GameWonBox.tscn").instance()
-							var center = Global.camera.get_camera_screen_center()
-							add_child(game_won_box)
-							game_won_box.global_position = center
-							return true
-		return false
-	return false
-
-# wyciąganie postaci tylko w aktualnej lokacji, iterowanie po nich, przypisanie produkcji 
-# do postaci, pozniej 
-# wyciągnięcie produkcji location_change, na koniec podpisanie pozostałych produkcji do bohatera
-
-func new_get_productions_for_characters(all_productions, location_info):
-	var location_characters = []
-	var location_items = []
-	var location_id = location_info["main_location_id"]
-	for location in world:
-		if location["Id"] == location_id:
-			location_characters = location["Characters"]
-			if location.has("Items"):
-				location_items = location["Items"]
-			break
-	
-	var duped_all_productions = all_productions.duplicate(true)
-	var productions_dictionary = {}
-	
-	for production in duped_all_productions:
-		var production_title = production["prod"]["Title"].to_lower()
-		if "teleportation" in production_title:
-			duped_all_productions.erase(production)
-		
-	for production in duped_all_productions:
-		var production_title = production["prod"]["Title"].to_lower()
-		if "location change" in production_title:
-			location_change_production = production
-			duped_all_productions.erase(production)
-	
-	for production in duped_all_productions:
-		for item in location_items:
-			var item_productions = []
-			var item_id = item["Id"]
-			var production_dict = {
-				"production": production,
-				"variants": []
-			}
-			for variant in production["variants"]:
-				for node in variant:
-					if node["WorldNodeId"] == item_id || node["WorldNodeName"] == item_id:
-						production_dict["variants"].append(variant)
-			
-			if production_dict["variants"] != []:
-				if productions_dictionary.has(item_id):
-					productions_dictionary[item_id].append(production_dict)
-				else:
-					productions_dictionary[item_id] = [production_dict]
-	
-	for character in location_characters:
-		if character["Id"] == main_character_id:
-			location_characters.erase(character)
-			location_characters.push_back(character)
-			break
-		
-	for production in duped_all_productions:
-		for character in location_characters:
-			var character_id = character["Id"]
-			var production_dict = {
-				"production": production,
-				"variants": []
-			}
-			for variant in production["variants"]:
-				for node in variant:
-					if node["WorldNodeId"] == character_id || node["WorldNodeName"] == character_id:
-						if character_id == main_character_id:
-							if !check_if_more_objects_fit(production["variants"], location_characters, location_items):
-								production_dict["variants"].append(variant)
-						else:
-							production_dict["variants"].append(variant)
-							
-			if production_dict["variants"] != []:
-				if productions_dictionary.has(character_id):
-					productions_dictionary[character_id].append(production_dict)
-				else:
-					productions_dictionary[character_id] = [production_dict]
-	new_productions = productions_dictionary
 
 func check_if(object_id, variants):
 	for variant in variants:
@@ -420,7 +420,6 @@ func check_if_more_objects_fit(variants, characters, items):
 				fitting_characters_count += 1
 	return fitting_characters_count > 0
 
-# personalizuje opis produkcji, zastępując placeholder między "«" a "»"
 func personalise_description(description, variant):
 	var description_to_return = description
 	for node in variant:

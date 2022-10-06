@@ -82,7 +82,12 @@ position = Vector2( 0, -116 )
 shape = SubResource( 1 )
 one_way_collision_margin = 0.0
 
-[node name="RightHand" type="TextureRect" parent="."]
+[node name="ControlNode" type="TextureRect" parent="."]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightHand" type="TextureRect" parent="ControlNode"]
 margin_left = -24.0
 margin_top = -92.0
 margin_right = 16.0
@@ -92,7 +97,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeftHand" type="TextureRect" parent="."]
+[node name="LeftHand" type="TextureRect" parent="ControlNode"]
 margin_left = 13.0
 margin_top = -109.0
 margin_right = 53.0
